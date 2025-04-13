@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mycoolsite.onrender.com/sitemap.xml
