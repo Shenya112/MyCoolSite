@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой YouTube</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/youtube">Мой YouTube</a>
+                <a href="/products">Товары</a>
+            </div>
+            <div class="account">
+                {% if session.username %}
+                    <a href="/account"><i class="fas fa-user"></i> {{ session.username }}</a>
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                {% else %}
+                    <a href="/login"><i class="fas fa-user"></i> Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <section class="content">
+        <h2>Мой YouTube</h2>
+        <p class="intro-text">Я — brun0vik112, геймер и стример. Смотри мои видео на канале <a href="https://www.youtube.com/@brun0vik112" target="_blank">brun0vik112</a>!</p>
+        <div class="videos">
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/aohg0ba4wEk" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/qjTOWP1qBVM" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#facc15' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#facc15', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            VanillaTilt.init(document.querySelectorAll('.video-card'), {
+                max: 15,
+                speed: 400,
+                glare: true,
+                'max-glare': 0.3,
+            });
+        });
+    </script>
+</body>
+</html>

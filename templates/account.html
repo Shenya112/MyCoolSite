@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/youtube">Мой YouTube</a>
+                <a href="/products">Товары</a>
+            </div>
+            <div class="account">
+                <a href="/account"><i class="fas fa-user"></i> {{ session.username }}</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+            </div>
+        </div>
+    </nav>
+    <section class="content">
+        <h2>Личный кабинет</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <h3>Мои товары</h3>
+        {% if products %}
+            <div class="products">
+                {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-info">
+                            <h4>{{ product }}</h4>
+                            <p>Оптимизация для {{ 'Windows' if product == 'BOOST-PC' else 'Android' }}</p>
+                        </div>
+                        <div class="product-actions">
+                            <a href="{{ url_for('download', product=product) }}" class="download-btn">Скачать</a>
+                            <button class="delete-btn" onclick="openDeleteModal('{{ product }}')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>У вас пока нет купленных товаров.</p>
+        {% endif %}
+    </section>
+
+    <!-- Модальное окно для подтверждения пароля -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteModal()">×</span>
+            <h3>Удаление товара</h3>
+            <p>Введите пароль для подтверждения удаления товара <strong id="productName"></strong>:</p>
+            <form id="deleteForm" method="POST" action="">
+                <input type="password" name="password" placeholder="Введите пароль" required>
+                <button type="submit" class="delete-btn-form">Удалить</button>
+                <button type="button" class="cancel-btn" onclick="closeDeleteModal()">Отмена</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#facc15' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#facc15', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            VanillaTilt.init(document.querySelectorAll('.product-card'), {
+                max: 15,
+                speed: 400,
+                glare: true,
+                'max-glare': 0.3,
+            });
+        });
+
+        function openDeleteModal(product) {
+            if (confirm("Вы уверены, что хотите удалить этот товар?")) {
+                document.getElementById('productName').textContent = product;
+                document.getElementById('deleteForm').action = "/delete/" + product;
+                document.getElementById('deleteModal').style.display = 'block';
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            document.getElementById('productName').textContent = '';
+            document.getElementById('deleteForm').action = '';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                closeDeleteModal();
+            }
+        }
+    </script>
+</body>
+</html>

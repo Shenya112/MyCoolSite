@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удаление товара</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/youtube">Мой YouTube</a>
+                <a href="/products">Товары</a>
+            </div>
+            <div class="account">
+                <a href="/account"><i class="fas fa-user"></i> {{ session.username }}</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+            </div>
+        </div>
+    </nav>
+    <section class="content">
+        <h2>Удаление товара</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <p>Вы собираетесь удалить товар <strong>{{ product }}</strong>. Введите пароль для подтверждения:</p>
+        <form method="POST" action="{{ url_for('delete_product', product=product) }}">
+            <input type="password" name="password" placeholder="Введите пароль" required>
+            <button type="submit" class="delete-btn-form">Удалить</button>
+            <a href="/account" class="cancel-btn">Отмена</a>
+        </form>
+    </section>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
